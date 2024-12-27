@@ -1,0 +1,60 @@
+{
+  "name": "project-structure-extractor",
+  "displayName": "Project Structure Extractor",
+  "description": "Get the structure of your project as a text",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+        "type": "object",
+        "title": "Project Structure Exporter Settings",
+        "properties": {
+            "projectStructureExporter.useGitIgnore": {
+                "type": "boolean",
+                "default": true,
+                "description": "To leverage gitignore to exclude files and folders."
+            },
+            "projectStructureExporter.outputFormat": {
+                "type": "string",
+                "enum": ["tree", "list"],
+                "default": "tree",
+                "description": "The format of the project structure output."
+            },
+            "projectStructureExporter.maxDepth": {
+                "type": "number",
+                "default": 2,
+                "description": "The maximum depth to scan for directories. -1 means no limit."
+            }
+        }
+    },
+    "commands": [
+      {
+        "command": "extension.extractProjectStructure",
+        "title": "Extract Project Structure"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0"
+  },
+  "dependencies": {
+    "clipboardy": "^4.0.0"
+  }
+}
