@@ -17,7 +17,7 @@ A Visual Studio Code extension that helps you extract and copy your project's fo
 
 1. Open a project in VS Code
 2. Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS)
-3. Type "Generate Project Structure" and press Enter
+3. Type "Extract Project Structure" and press Enter
 4. The structure will be copied to your clipboard
 
 Example output (Tree format):

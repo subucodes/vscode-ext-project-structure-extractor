@@ -4,6 +4,11 @@
   "description": "Get the structure of your project as a text",
   "version": "0.0.1",
   "icon": "icon.png",
+  "publisher": "subbusyntax",
+  "galleryBanner": {
+    "color": "#007ACC",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.96.0"
   },
