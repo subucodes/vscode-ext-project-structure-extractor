@@ -3,19 +3,18 @@
   "displayName": "Project Structure Extractor",
   "description": "Get the structure of your project as a text",
   "version": "0.0.1",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.96.0"
   },
+  "license": "MIT",
   "categories": [
     "Other"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/project-structure-exporter"
+    "url": "https://github.com/subucodes/vscode-ext-project-structure-extractor"
   },
-  "activationEvents": [
-    "onCommand:extension.extractProjectStructure"
-  ],
   "main": "./extension.js",
   "contributes": {
     "configuration": {
