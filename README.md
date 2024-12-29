@@ -3,12 +3,12 @@
 A Visual Studio Code extension that helps you extract and copy your project's folder structure in either tree or list format.
 
 ## Features
-
 - 📋 Copy project structure to clipboard
 - 🌲 Multiple output formats:
   - Tree view (similar to `tree` command)
   - List view (Markdown-compatible list)
 - 🎯 .gitignore support
+- 📁 Option to exclude files (folders only)
 - 🔍 Configurable depth scanning
 - ⚡ Smart file sorting (VS Code explorer style)
 - 🚀 Progress indicators
@@ -71,10 +71,11 @@ Example output (List format):
 
 This extension contributes the following settings:
 
+* `projectStructureExporter.excludeFiles`: Enable/disable file listing in output (default: `false`)
 * `projectStructureExporter.useGitIgnore`: Enable/disable .gitignore filtering (default: `true`)
 * `projectStructureExporter.outputFormat`: Choose format - "tree" or "list" (default: `"tree"`)
 * `projectStructureExporter.maxDepth`: Maximum folder depth (-1 for unlimited) (default: `-1`)
-* `projectStructureExporter.includeHiddenFiles`: Show hidden files/folders (default: `false`)
+
 
 ## Requirements
 

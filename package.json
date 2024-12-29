@@ -26,6 +26,11 @@
       "type": "object",
       "title": "Project Structure Exporter Settings",
       "properties": {
+        "projectStructureExporter.excludeFiles": {
+          "type": "boolean",
+          "default": false,
+          "description": "When set to true, only the folder strucure gets copied."
+        },
         "projectStructureExporter.useGitIgnore": {
           "type": "boolean",
           "default": true,
@@ -68,7 +73,6 @@
     "eslint": "^9.16.0"
   },
   "dependencies": {
-    "clipboardy": "^4.0.0",
     "minimatch": "^10.0.1"
   }
 }

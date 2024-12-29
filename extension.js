@@ -153,6 +153,9 @@ async function generateProjectStructure(rootPath, config) {
 
       const filteredEntries = await Promise.all(
         entries.map(async (entry) => {
+          if (config.excludeFiles && !entry.isDirectory()) {
+            return null;
+          }
           if (!config.useGitIgnore) {
             return entry;
           }
@@ -205,8 +208,7 @@ async function generateProjectStructure(rootPath, config) {
 
 async function copyToClipboard(startTime, content) {
   try {
-    const clipboardy = await import("clipboardy");
-    await clipboardy.default.write(content);
+    await vscode.env.clipboard.writeText(content);
     const endTime = performance.now();
     const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2);
     // Show temporary message
@@ -259,6 +261,7 @@ function getConfiguration() {
     useGitIgnore: config.get("useGitIgnore", false),
     outputFormat: config.get("outputFormat", "tree"),
     maxDepth: config.get("maxDepth", -1),
+    excludeFiles: config.get("excludeFiles", true),
   };
 }
 
