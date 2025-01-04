@@ -134,15 +134,20 @@ async function readGitignorePatterns(rootPath) {
 }
 
 async function generateProjectStructure(rootPath, config) {
-  // Get folder name from path
   const rootName = path.basename(rootPath);
+
+  async function getFormattedSize(entryPath) {
+    if (!config.showSize) return '';
+    const stats = await getStats(entryPath);
+    const sizeKB = (stats.size / 1024).toFixed(1);
+    return sizeKB === '0.0' ? '' : ` (${sizeKB} KB)`;
+  }
 
   async function getFolderStructure(
     folderPath,
     indentLevel = FORMAT_SETTINGS[config.outputFormat].defaultIndentLevel,
     currentDepth = 0
   ) {
-    // Check depth limit
     if (config.maxDepth !== -1 && currentDepth >= config.maxDepth) {
       return "";
     }
@@ -176,12 +181,14 @@ async function generateProjectStructure(rootPath, config) {
         const entry = validEntries[i];
         const isLast = i === validEntries.length - 1;
         const prefix = formatSettings.entryPrefix(isLast);
+        const entryPath = path.join(folderPath, entry.name);
+        const sizeStr = entry.isDirectory() ? '' : await getFormattedSize(entryPath);
 
-        structure += `${indent}${prefix}${entry.name}\n`;
+        structure += `${indent}${prefix}${entry.name}${sizeStr}\n`;
 
         if (entry.isDirectory()) {
           structure += await getFolderStructure(
-            path.join(folderPath, entry.name),
+            entryPath,
             indentLevel + 1,
             currentDepth + 1
           );
@@ -262,7 +269,74 @@ function getConfiguration() {
     outputFormat: config.get("outputFormat", "tree"),
     maxDepth: config.get("maxDepth", -1),
     excludeFiles: config.get("excludeFiles", true),
+    showSize: config.get("showSize", false),
+    selectAndExtractButton: config.get("selectAndExtractButton", false),
   };
+}
+
+let statusBarButton;
+
+function createStatusBarButton(context) {
+  const config = getConfiguration();
+  if (!config.selectAndExtractButton) return;
+
+  statusBarButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+  statusBarButton.text = "✨ Extract Structure";
+  statusBarButton.command = "extension.selectAndExtractFolder";
+  statusBarButton.tooltip = "Select a folder and extract its structure to the clipboard";
+  statusBarButton.show();
+
+  context.subscriptions.push(statusBarButton);
+}
+
+function updateStatusBarButton(context) {
+  const config = getConfiguration();
+  if (config.selectAndExtractButton) {
+    if (!statusBarButton) {
+      createStatusBarButton(context);
+    } else {
+      statusBarButton.show();
+    }
+  } else {
+    if (statusBarButton) {
+      statusBarButton.hide();
+    }
+  }
+}
+
+async function selectAndExtractFolder() {
+  try {
+    const config = getConfiguration();
+    const startTime = performance.now();
+
+    cache.gitignorePatterns.clear();
+    cache.statsCache.clear();
+    cache.patternSet.clear();
+
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders?.length) {
+      vscode.window.showWarningMessage("No workspace folder is open!");
+      return;
+    }
+
+    const selectedUri = await vscode.window.showOpenDialog({
+      canSelectFolders: true,
+      canSelectFiles: false,
+      openLabel: "Select Folder",
+    });
+
+    if (!selectedUri || selectedUri.length === 0) {
+      vscode.window.showWarningMessage("No folder selected!");
+      return;
+    }
+
+    const rootPath = selectedUri[0].fsPath;
+    const projectStructure = await generateProjectStructure(rootPath, config);
+
+    await copyToClipboard(startTime, projectStructure);
+  } catch (error) {
+    vscode.window.showErrorMessage(`Error: ${error.message}`);
+  }
 }
 
 function activate(context) {
@@ -296,7 +370,19 @@ function activate(context) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  let selectAndExtractDisposable = vscode.commands.registerCommand(
+    "extension.selectAndExtractFolder",
+    selectAndExtractFolder
+  );
+
+  context.subscriptions.push(disposable, selectAndExtractDisposable);
+  updateStatusBarButton(context); // Ensure the button is created on activation
+
+  vscode.workspace.onDidChangeConfiguration((e) => {
+    if (e.affectsConfiguration("projectStructureExporter.selectAndExtractButton")) {
+      updateStatusBarButton(context);
+    }
+  });
 }
 
 function deactivate() {}

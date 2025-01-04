@@ -12,6 +12,8 @@ A Visual Studio Code extension that helps you extract and copy your project's fo
 - 🔍 Configurable depth scanning
 - ⚡ Smart file sorting (VS Code explorer style)
 - 🚀 Progress indicators
+- 📏 Show file sizes in the project structure
+- 🖱️ Status bar button to select a folder and extract its structure
 
 ## Usage
 
@@ -75,6 +77,8 @@ This extension contributes the following settings:
 * `projectStructureExporter.useGitIgnore`: Enable/disable .gitignore filtering (default: `true`)
 * `projectStructureExporter.outputFormat`: Choose format - "tree" or "list" (default: `"tree"`)
 * `projectStructureExporter.maxDepth`: Maximum folder depth (-1 for unlimited) (default: `-1`)
+* `projectStructureExporter.showSize`: Enable/disable showing file sizes in the project structure (default: `false`)
+* `projectStructureExporter.selectAndExtractButton`: Enable/disable the status bar button to extract the structure by clicking the button.Also, supports selective extraction. (default: `true`)
 
 
 ## Requirements

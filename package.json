@@ -2,7 +2,7 @@
   "name": "project-structure-extractor",
   "displayName": "Project Structure Extractor",
   "description": "Get the structure of your project as a text",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "icon": "icon.png",
   "publisher": "subbusyntax",
   "galleryBanner": {
@@ -21,6 +21,11 @@
     "url": "https://github.com/subucodes/vscode-ext-project-structure-extractor"
   },
   "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:extension.extractProjectStructure",
+    "onCommand:extension.selectAndExtractFolder"
+  ],
   "contributes": {
     "configuration": {
       "type": "object",
@@ -49,6 +54,16 @@
           "type": "number",
           "default": -1,
           "description": "The maximum depth to scan for directories. -1 means no limit."
+        },
+        "projectStructureExporter.showSize": {
+          "type": "boolean",
+          "default": false,
+          "description": "To show the size of the files and folders."
+        },
+        "projectStructureExporter.selectAndExtractButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "To extract the structure by clicking the button in the status bar.Supports selective extraction."
         }
       }
     },
@@ -56,6 +71,10 @@
       {
         "command": "extension.extractProjectStructure",
         "title": "Extract Project Structure"
+      },
+      {
+        "command": "extension.selectAndExtractFolder",
+        "title": "Select and Extract Folder"
       }
     ]
   },
