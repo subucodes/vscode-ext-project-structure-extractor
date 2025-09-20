@@ -2,7 +2,7 @@
   "name": "project-structure-extractor",
   "displayName": "Project Structure Extractor",
   "description": "Get the structure of your project as a text",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "icon": "icon.png",
   "publisher": "subbusyntax",
   "galleryBanner": {
