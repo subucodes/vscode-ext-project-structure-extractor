@@ -2,7 +2,7 @@
   "name": "project-structure-extractor",
   "displayName": "Project Structure Extractor",
   "description": "Get the structure of your project as a text",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "icon": "icon.png",
   "publisher": "subbusyntax",
   "galleryBanner": {
@@ -87,11 +87,15 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.96.0",
-    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-cli": "^0.0.15",
     "@vscode/test-electron": "^2.4.1",
-    "eslint": "^9.16.0"
+    "eslint": "^9.39.5"
   },
   "dependencies": {
-    "minimatch": "^10.0.1"
+    "minimatch": "^10.2.6"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.1.0",
+    "diff": "^8.0.4"
   }
 }

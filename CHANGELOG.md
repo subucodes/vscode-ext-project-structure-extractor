@@ -5,6 +5,19 @@ All notable changes to the "Project Structure Extractor" extension will be docum
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-08-14
+
+### Security
+
+- Upgraded `minimatch` to `^10.2.6`, resolving three ReDoS advisories ([GHSA-3ppc-4f35-3m26](https://github.com/advisories/GHSA-3ppc-4f35-3m26), [GHSA-7r86-cg39-jmmj](https://github.com/advisories/GHSA-7r86-cg39-jmmj), [GHSA-23c5-xmqv-rm74](https://github.com/advisories/GHSA-23c5-xmqv-rm74)). This is the only dependency that ships to users, and it is reachable from `.gitignore` pattern matching.
+- Cleared all 12 reported vulnerabilities (8 high, 3 moderate, 1 low) — `npm audit` now reports 0. Development tooling was updated alongside: `@vscode/test-cli` to `^0.0.15` and `eslint` to `^9.39.5`, with `overrides` pinning `serialize-javascript` and `diff` to patched releases that upstream ranges could not reach.
+- See [SECURITY.md](SECURITY.md) for the full analysis.
+
+### Fixed
+
+- `.gitignore` entries anchored to the workspace root (for example `/.next/`, `/out/`, `/coverage`) were silently ignored, so those folders still appeared in the extracted structure.
+- `.gitignore` patterns spanning multiple path segments (for example `.yarn/*`, `app/blog`) never matched on Windows because path separators were not normalised.
+
 ## [0.1.1] - 2025-09-20
 
 ### Fixed
@@ -65,3 +78,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.0.3]: https://github.com/subucodes/vscode-ext-project-structure-extractor/releases/tag/v0.0.3
 [0.1.0]: https://github.com/subucodes/vscode-ext-project-structure-extractor/releases/tag/v0.1.0
 [0.1.1]: https://github.com/subucodes/vscode-ext-project-structure-extractor/releases/tag/v0.1.1
+[0.1.2]: https://github.com/subucodes/vscode-ext-project-structure-extractor/releases/tag/v0.1.2

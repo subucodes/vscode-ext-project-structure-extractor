@@ -52,16 +52,21 @@ const memoizedConvertPattern = (() => {
 
     pattern = pattern.trim();
     const isNegated = pattern.startsWith("!");
-    const isDirOnly = pattern.endsWith("/");
 
     let processedPattern = isNegated ? pattern.slice(1) : pattern;
+    const isDirOnly = processedPattern.endsWith("/");
     processedPattern = isDirOnly
       ? processedPattern.slice(0, -1)
       : processedPattern;
-    processedPattern =
-      !processedPattern.startsWith("**/") && !processedPattern.startsWith("/")
-        ? `**/${processedPattern}`
-        : processedPattern;
+
+    // A leading slash anchors the pattern to the workspace root. Paths are
+    // matched as root-relative, so the slash is dropped rather than kept —
+    // keeping it would never match. Everything else may match at any depth.
+    if (processedPattern.startsWith("/")) {
+      processedPattern = processedPattern.slice(1);
+    } else if (!processedPattern.startsWith("**/")) {
+      processedPattern = `**/${processedPattern}`;
+    }
 
     const result = { pattern: processedPattern, isNegated, isDirOnly };
     patternCache.set(pattern, result);
@@ -80,7 +85,12 @@ async function getStats(entryPath) {
 }
 
 async function shouldIgnore(entryPath, rootPath, patterns) {
-  const relativePath = path.relative(rootPath, entryPath);
+  // minimatch patterns always use forward slashes, so normalise the separator
+  // that path.relative produces (backslashes on Windows).
+  const relativePath = path
+    .relative(rootPath, entryPath)
+    .split(path.sep)
+    .join("/");
   const stats = await getStats(entryPath);
   const isDirectory = stats.isDirectory();
 
